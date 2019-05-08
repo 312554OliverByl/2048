@@ -17,18 +17,18 @@ namespace _2048
 
         static Tile()
         {
-            tileColors.Add(2,    new SolidColorBrush(Color.FromRgb( 238, 228, 219 )));
-            tileColors.Add(4,    new SolidColorBrush(Color.FromRgb( 238, 223, 200 )));
-            tileColors.Add(8,    new SolidColorBrush(Color.FromRgb( 242, 177, 121 )));
-            tileColors.Add(16,   new SolidColorBrush(Color.FromRgb( 236, 141,  85 )));
-            tileColors.Add(32,   new SolidColorBrush(Color.FromRgb( 247, 123,  96 )));
-            tileColors.Add(64,   new SolidColorBrush(Color.FromRgb( 234,  90,  56 )));
-            tileColors.Add(128,  new SolidColorBrush(Color.FromRgb( 238, 206, 115 )));
-            tileColors.Add(256,  new SolidColorBrush(Color.FromRgb( 242, 210,  75 )));
-            tileColors.Add(512,  new SolidColorBrush(Color.FromRgb( 239, 202,  78)));
-            tileColors.Add(1024, new SolidColorBrush(Color.FromRgb( 227, 186,  20 )));
-            tileColors.Add(2048, new SolidColorBrush(Color.FromRgb( 236, 196,   2 )));
-            tileColors.Add(4096, new SolidColorBrush(Color.FromRgb(  96, 217, 146 )));
+            tileColors.Add(2, new SolidColorBrush(Color.FromRgb(238, 228, 219)));
+            tileColors.Add(4, new SolidColorBrush(Color.FromRgb(238, 223, 200)));
+            tileColors.Add(8, new SolidColorBrush(Color.FromRgb(242, 177, 121)));
+            tileColors.Add(16, new SolidColorBrush(Color.FromRgb(236, 141, 85)));
+            tileColors.Add(32, new SolidColorBrush(Color.FromRgb(247, 123, 96)));
+            tileColors.Add(64, new SolidColorBrush(Color.FromRgb(234, 90, 56)));
+            tileColors.Add(128, new SolidColorBrush(Color.FromRgb(238, 206, 115)));
+            tileColors.Add(256, new SolidColorBrush(Color.FromRgb(242, 210, 75)));
+            tileColors.Add(512, new SolidColorBrush(Color.FromRgb(239, 202, 78)));
+            tileColors.Add(1024, new SolidColorBrush(Color.FromRgb(227, 186, 20)));
+            tileColors.Add(2048, new SolidColorBrush(Color.FromRgb(236, 196, 2)));
+            tileColors.Add(4096, new SolidColorBrush(Color.FromRgb(96, 217, 146)));
         }
 
         private Rectangle colDisplay;
@@ -56,7 +56,7 @@ namespace _2048
             colDisplay.Width = Board.TILE_SIZE;
             colDisplay.Height = Board.TILE_SIZE;
             colDisplay.Fill = tileColors[number];
-            
+
             this.number = number;
             numDisplay = new Label();
             numDisplay.Content = number.ToString();
@@ -98,14 +98,14 @@ namespace _2048
                 moving = targetX != screenX || targetY != screenY;
 
                 if (targetX > screenX)
-                    screenX += 136;
+                    screenX += 68;
                 else if (targetX < screenX)
-                    screenX -= 136;
+                    screenX -= 68;
 
                 if (targetY > screenY)
-                    screenY += 136;
+                    screenY += 68;
                 else if (targetY < screenY)
-                    screenY -= 136;
+                    screenY -= 68;
             }
         }
 
@@ -114,7 +114,7 @@ namespace _2048
             Canvas.SetLeft(colDisplay, screenX + xo);
             Canvas.SetTop(colDisplay, screenY + yo);
             canvas.Children.Add(colDisplay);
-            
+
             Canvas.SetLeft(numDisplay, screenX + xo + labelXAdjust);
             Canvas.SetTop(numDisplay, screenY + yo + labelYAdjust);
             canvas.Children.Add(numDisplay);

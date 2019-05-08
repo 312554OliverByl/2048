@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -116,7 +117,7 @@ namespace _2048
         /// <param name="toY">Destination Y position</param>
         public void moveTile(int fromX, int fromY, int toX, int toY)
         {
-            if(!isTileAt(toX, toY))
+            if (isTileAt(fromX, fromY) && !isTileAt(toX, toY))
             {
                 int fromPos = fromX + fromY * width;
                 int toPos = toX + toY * width;
@@ -153,5 +154,6 @@ namespace _2048
                 if (t != null)
                     t.render(canvas, x, y);
         }
+       
     }
 }
