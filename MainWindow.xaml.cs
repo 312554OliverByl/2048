@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/* Unit 4 Group Project
+ * May 17, 2019
+ * Oliver Byl, Morghan Kiverago, Aidan Hobman
+ */
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace _2048
 {
@@ -24,6 +15,8 @@ namespace _2048
         {
             InitializeComponent();
 
+            //Create new Game and feed it the canvas.
+            //No other init code is necessary.
             new Game(canvas);
         }
     }

@@ -10,11 +10,18 @@ using System.Windows.Shapes;
 
 namespace _2048
 {
+    /// <summary>
+    /// The class that described the game board.
+    /// 
+    /// Written by Oliver.
+    /// </summary>
     public class Board
     {
+        //Sizing constants.
         public static readonly int TILE_BORDER = 16;
         public static readonly int TILE_SIZE = 120;
 
+        //Control variables.
         private Canvas background;
         public int width;
         public int height;
@@ -101,9 +108,11 @@ namespace _2048
         /// </summary>
         /// <param name="x">X position of tile on board.</param>
         /// <param name="y">Y position of tile on board.</param>
-        /// <returns>Number of tile.</returns>
+        /// <returns>Number of tile. -1 if no tile.</returns>
         public int tileNumberAt(int x, int y)
         {
+            if (!isTileAt(x, y))
+                return -1;
             return tiles[x + y * width].number;
         }
 
@@ -154,6 +163,15 @@ namespace _2048
                 if (t != null)
                     t.render(canvas, x, y);
         }
-       
+
+        /// <summary>
+        /// Resets the board by deleting all tiles.
+        /// </summary>
+        public void reset()
+        {
+            for (int i = 0; i < tiles.Length; i++)
+                tiles[i] = null;
+        }
+
     }
 }
