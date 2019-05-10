@@ -268,7 +268,7 @@ namespace _2048
                                 else if (board.tileNumberAt(d, y) == board.tileNumberAt(d - 1, y) && !hasCombined)
                                 {
                                     board.setTileAt(d - 1, y, board.tileNumberAt(d, y) * 2);
-                                    
+                                    addToScore(board.tileNumberAt(d, y) * 2);
                                     board.deleteTileAt(d, y);
                                     hasCombined = true;
                                     addtile = true;
@@ -395,7 +395,7 @@ namespace _2048
         /// <summary>
         /// Checks to see if the game has been lost.
         /// 
-        /// Written by Oliver.
+        /// Written by Oliver and Morghan.
         /// </summary>
         /// <returns>If the game is lost.</returns>
         private bool checkIfLost()
@@ -445,7 +445,7 @@ namespace _2048
         /// <summary>
         /// Adds to the current score.
         /// 
-        /// Written by Aidan/Morghan.
+        /// Written by Aidan and Morghan.
         /// </summary>
         /// <param name="add">Amount to add.</param>
         private void addToScore(int add)
