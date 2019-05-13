@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 namespace _2048
 {
     /// <summary>
-    /// The class that described the game board.
+    /// The class that describes the game board.
     /// 
     /// Written by Oliver.
     /// </summary>
@@ -29,6 +29,7 @@ namespace _2048
 
         public Board()
         {
+            //Set default board width and height.
             width = 4;
             height = 4;
             tiles = new Tile[width * height];
@@ -43,12 +44,14 @@ namespace _2048
         {
             background = new Canvas();
 
+            //Bottom layer of background:
             Rectangle bottomLayer = new Rectangle();
             bottomLayer.Width = 560;
             bottomLayer.Height = 560;
             bottomLayer.Fill = new SolidColorBrush(Color.FromRgb(182, 170, 158));
             background.Children.Add(bottomLayer);
 
+            //Create a lighter background for each individual tile:
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)

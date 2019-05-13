@@ -5,6 +5,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Shapes;
+using System.IO;
+using System.Windows.Input;
 
 namespace _2048
 {
@@ -19,8 +21,10 @@ namespace _2048
     /// </summary>
     public class Game
     {
+        //How many times per second the game will be updated:
         private const int FPS = 60;
 
+        //All display variables.
         private Canvas canvas;
         private Label title;
         private Label desc1;
@@ -35,26 +39,34 @@ namespace _2048
         private Rectangle loseOverlay;
         private Button newGame;
 
+        //All logical variables.
         private Board board;
         private Random random;
         private bool lostGame;
+        private int highScore;
 
         public Game(Canvas canvas)
         {
             this.canvas = canvas;
             canvas.Background = new SolidColorBrush(Color.FromRgb(251, 248, 240));
 
+            //Initialize all visual elements.
             initHeader();
+
+            //Initialize logical variables.
             board = new Board();
             random = new Random();
             lostGame = false;
 
+            //Create a timer to call the tick() and render() methods 60 times per second.
             DispatcherTimer timer = new DispatcherTimer();
             timer.Tick += tick;
             timer.Tick += render;
             timer.Interval = new TimeSpan(0, 0, 0, 0, 1000 / FPS);
+            //Start the timer.
             timer.Start();
 
+            //Begin the game with two tiles on the board in a random position.
             addRandomTile();
             addRandomTile();
         }
@@ -65,6 +77,8 @@ namespace _2048
         private void initHeader()
         {
             //Written by Oliver:
+
+            //Game title:
             title = new Label();
             title.Content = "2048";
             title.FontSize = 80;
@@ -74,6 +88,7 @@ namespace _2048
             Canvas.SetLeft(title, 12);
             Canvas.SetTop(title, 10);
 
+            //Part 1 of the game description:
             desc1 = new Label();
             desc1.Content = "Join the numbers and get to the";
             desc1.FontSize = 18;
@@ -83,6 +98,7 @@ namespace _2048
             Canvas.SetLeft(desc1, 12);
             Canvas.SetTop(desc1, 123);
 
+            //Part 2 of the game description:
             desc2 = new Label();
             desc2.Content = "2048 tile!";
             desc2.FontSize = 18;
@@ -92,6 +108,7 @@ namespace _2048
             Canvas.SetLeft(desc2, 270);
             Canvas.SetTop(desc2, 123);
 
+            //The label that shows when you lose the game:
             loseLabel = new Label();
             loseLabel.Content = "Game Over!";
             loseLabel.FontSize = 60;
@@ -101,6 +118,7 @@ namespace _2048
             Canvas.SetLeft(loseLabel, 120);
             Canvas.SetTop(loseLabel, 400);
 
+            //The background of the score:
             scoreBackground = new Rectangle();
             scoreBackground.Width = 120;
             scoreBackground.Height = 60;
@@ -108,6 +126,7 @@ namespace _2048
             Canvas.SetLeft(scoreBackground, 320);
             Canvas.SetTop(scoreBackground, 5);
 
+            //The background of the high score:
             highScoreBackground = new Rectangle();
             highScoreBackground.Width = 120;
             highScoreBackground.Height = 60;
@@ -115,6 +134,7 @@ namespace _2048
             Canvas.SetLeft(highScoreBackground, 450);
             Canvas.SetTop(highScoreBackground, 5);
 
+            //The rectangle that overlays the board when you lose:
             loseOverlay = new Rectangle();
             loseOverlay.Width = 560;
             loseOverlay.Height = 560;
@@ -123,6 +143,8 @@ namespace _2048
             Canvas.SetTop(loseOverlay, 190);
 
             //Written by Aidan:
+
+            //The score title:
             scoreLabel = new Label();
             scoreLabel.Content = "SCORE";
             scoreLabel.FontSize = 17;
@@ -132,6 +154,7 @@ namespace _2048
             Canvas.SetLeft(scoreLabel, 344);
             Canvas.SetTop(scoreLabel, 7);
 
+            //The high score title:
             highScoreLabel = new Label();
             highScoreLabel.Content = "BEST";
             highScoreLabel.FontSize = 17;
@@ -141,6 +164,7 @@ namespace _2048
             Canvas.SetLeft(highScoreLabel, 481);
             Canvas.SetTop(highScoreLabel, 7);
 
+            //The label that shows the score:
             scoreOutputLabel = new Label();
             scoreOutputLabel.Content = "0";
             scoreOutputLabel.FontSize = 20;
@@ -150,6 +174,22 @@ namespace _2048
             Canvas.SetLeft(scoreOutputLabel, 369);
             Canvas.SetTop(scoreOutputLabel, 30);
 
+            //Read the high score from a file and store it in highScore
+            StreamReader reader = new StreamReader("highscore.txt");
+            int.TryParse(reader.ReadLine(), out highScore);
+
+            //The label that shows the high score:
+            highScoreOutputLabel = new Label();
+            highScoreOutputLabel.Content = highScore.ToString();
+            highScoreOutputLabel.FontSize = 20;
+            highScoreOutputLabel.FontFamily = new FontFamily("Arial");
+            highScoreOutputLabel.FontWeight = FontWeights.Bold;
+            highScoreOutputLabel.Foreground = Brushes.White;
+            Canvas.SetTop(highScoreOutputLabel, 30);
+
+            reader.Close();
+
+            //The button that starts a new game:
             newGame = new Button();
             newGame.Content = "New Game";
             newGame.FontSize = 16;
@@ -172,13 +212,27 @@ namespace _2048
             //Written by Oliver:
             if (lostGame)
             {
+                //Update the board even if the game is lost so tiles
+                //finish their animations.
                 board.tick();
                 return;
             }
 
+            //Update all key presses.
             Input.tick();
 
             //Written by Morghan:
+
+            //The logic for each key press is similar but not similar enough to
+            //seperate into a method.
+            //Basically, for each key press:
+            //1. Visualize the board roatated such that the top is the direction the
+            //tiles should move in.
+            //2. Loop from the top left to the bottom right.
+            //3. If a tile is found, loop from its current position and move it as far 
+            //as possible back up the board.
+            //4. Combine if possible and if the tile hasn't already combined.
+
             if (Input.wasKeyPressed(Input.UP))
             {
                 bool addTile = false;
@@ -316,8 +370,11 @@ namespace _2048
                 lostGame = checkIfLost();
             }
             
+            //Update all tile animations:
             board.tick();
         }
+
+        private int time = 0;
 
         /// <summary>
         /// Redraw all necessary things to the screen, 60 times per second.
@@ -326,7 +383,10 @@ namespace _2048
         /// </summary>
         private void render(object sender, EventArgs e)
         {
+            //Clear all elements from the canvas:
             canvas.Children.Clear();
+
+            //Add all updated elements to the canvas:
             canvas.Children.Add(title);
             canvas.Children.Add(desc1);
             canvas.Children.Add(desc2);
@@ -336,9 +396,25 @@ namespace _2048
             canvas.Children.Add(scoreLabel);
             canvas.Children.Add(highScoreLabel);
             canvas.Children.Add(scoreOutputLabel);
+            canvas.Children.Add(highScoreOutputLabel); 
 
+            //Draw the board:
             board.render(canvas, 12, 190);
 
+            //Update the position of the high score label.
+            //The property AcutalWidth is not set until a
+            //draw pass has already been made, so we need
+            //to wait until now to use it.
+            if (time >= 0)
+            {
+                time++;
+                Canvas.SetLeft(highScoreOutputLabel, 510 - (highScoreOutputLabel.ActualWidth / 2));
+
+                if (time > 1)
+                    time = -1;
+            }
+
+            //Only draw the lose overlay if the game has been lost.
             if (!lostGame)
                 return;
 
@@ -400,10 +476,13 @@ namespace _2048
         /// <returns>If the game is lost.</returns>
         private bool checkIfLost()
         {
+            //Check every tile on the board.
             for(int x = 0; x < 4; x++)
             {
                 for(int y = 0; y < 4; y++)
                 {
+                    //If there is an available space the game has not
+                    //been lost.
                     if (!board.isTileAt(x, y))
                         return false;
 
@@ -414,6 +493,9 @@ namespace _2048
                     int yMin = y - 1;
                     int yMax = y + 1;
                     
+                    //If there is a tile on any side of the current tile
+                    //equal to it (i.e. it's possible to combine them),
+                    //the game has not been lost.
                     if (currentNum == board.tileNumberAt(xMin, y))
                         return false;
                     if (currentNum == board.tileNumberAt(xMax, y))
@@ -440,6 +522,9 @@ namespace _2048
             board.reset();
             addRandomTile();
             addRandomTile();
+            scoreOutputLabel.Content = "0";
+            Canvas.SetLeft(scoreOutputLabel, 369);
+            Keyboard.ClearFocus();
         }
 
         /// <summary>
@@ -453,11 +538,27 @@ namespace _2048
             int currentScore;
             int.TryParse(scoreOutputLabel.Content.ToString(), out currentScore);
             currentScore += add;
+
             scoreOutputLabel.Content = currentScore.ToString();
-            //Need to get score to reset
-            //Centre the score
+            Canvas.SetLeft(scoreOutputLabel, 380 - (scoreOutputLabel.ActualWidth / 2));
+
+            if (currentScore > highScore)
+            {
+                highScore = currentScore;
+                highScoreOutputLabel.Content = highScore.ToString();
+                Canvas.SetLeft(highScoreOutputLabel, 510 - (highScoreOutputLabel.ActualWidth / 2));
+            }
         }
 
+        /// <summary>
+        /// Save the high score to a file.
+        /// </summary>
+        public void saveHighScore()
+        {
+            StreamWriter writer = new StreamWriter("highscore.txt");
+            writer.WriteLine(highScore.ToString());
+            writer.Flush();
+            writer.Close();
+        }
     }
-
 }

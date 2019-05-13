@@ -18,7 +18,9 @@ namespace _2048
         public static readonly int LEFT = 2;
         public static readonly int RIGHT = 3;
 
+        //Store what keys have been pressed this tick.
         private static bool[] keys = new bool[4];
+        //Store what keys are currently being pressed.
         private static bool[] keysHeld = new bool[4];
 
         public static void tick()
@@ -27,12 +29,15 @@ namespace _2048
             for (int i = 0; i < keys.Length; i++)
                 keys[i] = false;
 
-            //Handle all key presses:
-
+            //Handle up key press:
             if (Keyboard.IsKeyDown(Key.Up))
             {
+                //Only accept key press if keysHeld for that key
+                //is false (i.e. it wasn't pressed last tick)
                 if (!keysHeld[UP])
                     keys[UP] = true;
+
+                //Update keys held.
                 keysHeld[UP] = true;
                 return;
             }
@@ -40,6 +45,8 @@ namespace _2048
             {
                 keysHeld[UP] = false;
             }
+
+            //Repeat above logic for three other keys:
 
             if (Keyboard.IsKeyDown(Key.Down))
             {

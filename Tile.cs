@@ -27,13 +27,13 @@ namespace _2048
             tileColors.Add(8,    new SolidColorBrush(Color.FromRgb( 242, 177, 121 )));
             tileColors.Add(16,   new SolidColorBrush(Color.FromRgb( 236, 141, 85  )));
             tileColors.Add(32,   new SolidColorBrush(Color.FromRgb( 247, 123, 96  )));
-            tileColors.Add(64,   new SolidColorBrush(Color.FromRgb( 234, 90,  56  )));
+            tileColors.Add(64,   new SolidColorBrush(Color.FromRgb( 234,  90, 56  )));
             tileColors.Add(128,  new SolidColorBrush(Color.FromRgb( 238, 206, 115 )));
             tileColors.Add(256,  new SolidColorBrush(Color.FromRgb( 242, 210, 75  )));
             tileColors.Add(512,  new SolidColorBrush(Color.FromRgb( 239, 202, 78  )));
             tileColors.Add(1024, new SolidColorBrush(Color.FromRgb( 227, 186, 20  )));
             tileColors.Add(2048, new SolidColorBrush(Color.FromRgb( 236, 196, 2   )));
-            tileColors.Add(4096, new SolidColorBrush(Color.FromRgb( 96,  217, 146 )));
+            tileColors.Add(4096, new SolidColorBrush(Color.FromRgb(  96, 217, 146 )));
         }
 
         //Display variables.
@@ -114,6 +114,10 @@ namespace _2048
             targetY = (boardY * Board.TILE_SIZE) + ((boardY + 1) * Board.TILE_BORDER);
         }
 
+        /// <summary>
+        /// Update position according to whether or not tile
+        /// should be moving.
+        /// </summary>
         public void tick()
         {
             //While moving, adjust position to be closer to target position.
@@ -136,6 +140,12 @@ namespace _2048
             }
         }
 
+        /// <summary>
+        /// Add both background and text to given canvas.
+        /// </summary>
+        /// <param name="canvas">Canvas to draw to.</param>
+        /// <param name="xo"></param>
+        /// <param name="yo"></param>
         public void render(Canvas canvas, int xo, int yo)
         {
             Canvas.SetLeft(colDisplay, screenX + xo);
