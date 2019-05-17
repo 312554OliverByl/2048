@@ -33,7 +33,6 @@ namespace _2048
             tileColors.Add(512,  new SolidColorBrush(Color.FromRgb( 239, 202, 78  )));
             tileColors.Add(1024, new SolidColorBrush(Color.FromRgb( 227, 186, 20  )));
             tileColors.Add(2048, new SolidColorBrush(Color.FromRgb( 236, 196, 2   )));
-            tileColors.Add(4096, new SolidColorBrush(Color.FromRgb(  96, 217, 146 )));
         }
 
         //Display variables.
@@ -65,7 +64,10 @@ namespace _2048
             colDisplay = new Rectangle();
             colDisplay.Width = Board.TILE_SIZE;
             colDisplay.Height = Board.TILE_SIZE;
-            colDisplay.Fill = tileColors[number];
+            if (tileColors.ContainsKey(number))
+                colDisplay.Fill = tileColors[number];
+            else
+                colDisplay.Fill = Brushes.Black;
 
             //Create number label.
             this.number = number;
